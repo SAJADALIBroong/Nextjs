@@ -34,7 +34,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         passphrase: ${{ secrets.PASS }}
         script: |
-          cd /Nextjs
+          cd Nextjs/
           git pull origin main
           npm install
           npm run build
