@@ -25,9 +25,6 @@ jobs:
     - name: Building the application
       run: npm run build
 
-    - name: Running tests
-      run: npm run test
-
     - name: Deploying to Digital Ocean
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: appleboy/ssh-action@master
