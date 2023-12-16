@@ -1,0 +1,43 @@
+name: Node.js CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checking out the repository
+      uses: actions/checkout@v2
+
+    - name: Setting up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18.17.0' 
+
+    - name: Installing dependencies
+      run: npm install
+
+    - name: Building the application
+      run: npm run build
+
+    - name: Running tests
+      run: npm run test
+
+    - name: Deploying to Digital Ocean
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          cd /Nestjs
+          git pull origin main
+          npm install
+          npm run build
+          npm run dev
